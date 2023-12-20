@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wii/components/snackbar.dart';
 import 'package:wii/main.dart';
 
 class LoginPage extends StatefulWidget {
@@ -28,9 +29,9 @@ class _LoginPageState extends State<LoginPage> {
     final storedPassword = user['password'].toString();
 
     if (storedPassword == password) {
-      print('Login berhasil');
+      CustomSnackBar.showSnackBar(currentContext, 'Login berhasil');
     } else {
-      print('Login gagal');
+      CustomSnackBar.showSnackBar(currentContext, 'Login gagal');
     }
   }
 
