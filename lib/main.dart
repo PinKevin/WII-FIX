@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wii/screens/dashboard.dart';
 import 'package:wii/screens/login.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:wii/screens/orders.dart';
+import 'package:wii/screens/profile.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +27,11 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'WII',
       home: const LoginPage(),
-      routes: {'/dashboard': (context) => const DashboardPage()},
+      routes: {
+        '/dashboard': (context) => const DashboardPage(),
+        '/orders': (context) => const OrdersPage(),
+        '/profile': (context) => const ProfilePage()
+      },
     );
   }
 }
