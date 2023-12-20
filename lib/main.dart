@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wii/screens/dashboard.dart';
 import 'package:wii/screens/login.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -20,10 +21,11 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'WII',
-      home: LoginPage(),
+      home: const LoginPage(),
+      routes: {'/dashboard': (context) => const DashboardPage()},
     );
   }
 }
