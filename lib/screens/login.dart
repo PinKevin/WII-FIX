@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:flutter/material.dart';
 import 'package:wii/components/snackbar.dart';
 import 'package:wii/main.dart';
@@ -21,17 +23,13 @@ class _LoginPageState extends State<LoginPage> {
         .from('pengguna')
         .select('username, password')
         .eq('username', username)
-        .single();
+        .eq('password', password)
+        .limit(1);
 
-    final user = response;
-    final storedPassword = user['password'].toString();
-
-    if (storedPassword == password) {
-      // ignore: use_build_context_synchronously
-      Navigator.pushNamed(context, '/dashboard');
-    } else {
-      // ignore: use_build_context_synchronously
+    if (response.isEmpty) {
       CustomSnackBar.showSnackBar(context, 'Login gagal');
+    } else {
+      Navigator.pushNamed(context, '/dashboard');
     }
   }
 
