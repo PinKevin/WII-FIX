@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wii/components/snackbar.dart';
 import 'package:wii/main.dart';
-import 'package:wii/screens/dashboard.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -29,8 +28,7 @@ class _LoginPageState extends State<LoginPage> {
 
     if (storedPassword == password) {
       // ignore: use_build_context_synchronously
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => const DashboardPage()));
+      Navigator.pushNamed(context, '/dashboard');
     } else {
       // ignore: use_build_context_synchronously
       CustomSnackBar.showSnackBar(context, 'Login gagal');
