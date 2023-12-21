@@ -10,13 +10,15 @@ class OrdersPage extends StatefulWidget {
 }
 
 class _OrdersPageState extends State<OrdersPage> {
-  Future<List<String>> _getTransactions() async {
-    final response = await supabase.from('transaksi').select('kodemeja');
+  Future<List<Map<String, dynamic>>> _getTransactions() async {
+    final response = await supabase.from('transaksi').select(
+        'shift, status, kodemeja, namapelanggan, total, metodepembayaran');
 
-    List<String> kodeMejaList =
-        response.map((item) => item['kodemeja'].toString()).toList();
+    List<Map<String, dynamic>> transactions = response.map((item) {
+      return Map<String, dynamic>.from(item);
+    }).toList();
 
-    return kodeMejaList;
+    return transactions;
   }
 
   @override
@@ -25,7 +27,7 @@ class _OrdersPageState extends State<OrdersPage> {
         appBar: AppBar(
           title: const Text('Daftar Transaksi'),
         ),
-        body: FutureBuilder<List<String>>(
+        body: FutureBuilder<List<Map<String, dynamic>>>(
             future: _getTransactions(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -38,13 +40,20 @@ class _OrdersPageState extends State<OrdersPage> {
                 return ListView.builder(
                     itemCount: transactions?.length,
                     itemBuilder: (context, index) {
+                      var transaction = transactions![index];
+
                       return Card(
-                        elevation: 3,
-                        margin: const EdgeInsets.all(8),
-                        child: ListTile(
-                          title: Text(transactions![index]),
-                        ),
-                      );
+                          elevation: 3,
+                          margin: const EdgeInsets.all(8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              for (var entry in transaction.entries)
+                                ListTile(
+                                  title: Text('${entry.key}: ${entry.value}'),
+                                )
+                            ],
+                          ));
                     });
               }
             }),
