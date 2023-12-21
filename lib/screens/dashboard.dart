@@ -14,7 +14,7 @@ class _DashboardPageState extends State<DashboardPage> {
   bool shift1Selected = false;
   bool shift2Selected = false;
 
-  Future<String?> _getUsername() async {
+  Future<String?> _getNamapengguna() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? username = prefs.getString('username');
 
@@ -32,7 +32,7 @@ class _DashboardPageState extends State<DashboardPage> {
     return Scaffold(
         appBar: AppBar(
           title: FutureBuilder<String?>(
-              future: _getUsername(),
+              future: _getNamapengguna(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
