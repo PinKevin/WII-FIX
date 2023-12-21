@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wii/components/bottom_app_bar.dart';
+import 'package:wii/components/bottomNavigationBar.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -12,12 +12,15 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Profil'),
-        ),
-        body: const Center(
-          child: Text('Profil'),
-        ),
-        bottomNavigationBar: BottomBar.showBottomAppBar(context));
+      appBar: AppBar(
+        title: const Text('Profil'),
+      ),
+      body: const Center(
+        child: Text('Profil'),
+      ),
+      bottomNavigationBar: const BottomNavBar(
+        selectedIndex: 3,
+      ),
+    );
   }
 }
