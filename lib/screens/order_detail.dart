@@ -5,8 +5,7 @@ import 'package:wii/screens/orders.dart';
 class TransactionDetailPage extends StatefulWidget {
   final Map<String, dynamic> transaction;
 
-  const TransactionDetailPage({Key? key, required this.transaction})
-      : super(key: key);
+  const TransactionDetailPage({super.key, required this.transaction});
 
   @override
   _TransactionDetailPageState createState() => _TransactionDetailPageState();
@@ -49,10 +48,10 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
           // Call a function to update the status
           _updateStatus();
           // Navigate to order.dart
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => OrdersPage()),
-          );
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const OrdersPage()),
+              (route) => false);
         },
         child: Text(_getButtonText()),
       ),
@@ -110,7 +109,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
     } else if (status == 'diproses') {
       return 'Pesanan Siap';
     } else if (status == 'siap disajikan') {
-      return 'batalkan status';
+      return 'Batalkan Status';
     }
     // Add more conditions for other status texts if needed
     return 'Ubah Status';
