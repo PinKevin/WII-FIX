@@ -15,11 +15,6 @@ class BottomBar {
             // ignore: avoid_print
             IconButton(
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/orders');
-                },
-                icon: const Icon(Icons.list)),
-            IconButton(
-                onPressed: () {
                   Navigator.pushReplacementNamed(context, '/profile');
                 },
                 icon: const Icon(Icons.person))

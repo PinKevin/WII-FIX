@@ -4,7 +4,16 @@ import 'package:wii/main.dart';
 import 'package:wii/screens/order_detail.dart'; // Import file baru
 
 class OrdersPage extends StatefulWidget {
-  const OrdersPage({super.key});
+  final DateTime? selectedDate;
+  final bool shift1Selected;
+  final bool shift2Selected;
+
+  const OrdersPage({
+    super.key,
+    required this.selectedDate,
+    required this.shift1Selected,
+    required this.shift2Selected,
+  });
 
   @override
   State<OrdersPage> createState() => _OrdersPageState();
@@ -12,8 +21,12 @@ class OrdersPage extends StatefulWidget {
 
 class _OrdersPageState extends State<OrdersPage> {
   Future<List<Map<String, dynamic>>> _getTransactions() async {
-    final response = await supabase.from('transaksi').select(
-        'idtransaksi, shift, status, kodemeja, namapelanggan, total, metodepembayaran');
+    final response = await supabase
+        .from('transaksi')
+        .select(
+            'idtransaksi, shift, status, kodemeja, namapelanggan, total, metodepembayaran')
+        .eq('tanggal', widget.selectedDate as Object)
+        .eq('shift', widget.shift1Selected ? 1 : 2);
 
     List<Map<String, dynamic>> transactions = response.map((item) {
       return Map<String, dynamic>.from(item);
@@ -141,7 +154,12 @@ class _OrdersPageState extends State<OrdersPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => TransactionDetailPage(transaction: transaction),
+        builder: (context) => TransactionDetailPage(
+          transaction: transaction,
+          selectedDate: widget.selectedDate,
+          shift1Selected: widget.shift1Selected,
+          shift2Selected: widget.shift2Selected,
+        ),
       ),
     );
   }

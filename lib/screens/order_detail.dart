@@ -4,8 +4,17 @@ import 'package:wii/screens/orders.dart';
 
 class TransactionDetailPage extends StatefulWidget {
   final Map<String, dynamic> transaction;
+  final DateTime? selectedDate;
+  final bool shift1Selected;
+  final bool shift2Selected;
 
-  const TransactionDetailPage({super.key, required this.transaction});
+  const TransactionDetailPage({
+    super.key,
+    required this.transaction,
+    required this.selectedDate,
+    required this.shift1Selected,
+    required this.shift2Selected,
+  });
 
   @override
   _TransactionDetailPageState createState() => _TransactionDetailPageState();
@@ -48,10 +57,15 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
           // Call a function to update the status
           _updateStatus();
           // Navigate to order.dart
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const OrdersPage()),
-              (route) => false);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => OrdersPage(
+                      selectedDate: widget.selectedDate,
+                      shift1Selected: widget.shift1Selected,
+                      shift2Selected: widget.shift2Selected,
+                    )),
+          );
         },
         child: Text(_getButtonText()),
       ),
