@@ -92,8 +92,9 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
       newStatus = 'diproses';
     } else if (status == 'diproses') {
       newStatus = 'siap disajikan';
+    } else if (status == 'siap disajikan') {
+      newStatus = 'diproses';
     }
-    // Lakukan pembaruan status di database menggunakan Supabase
     final supabase = Supabase.instance.client;
     await supabase
         .from('transaksi')
@@ -108,6 +109,8 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
       return 'Proses Pesanan';
     } else if (status == 'diproses') {
       return 'Pesanan Siap';
+    } else if (status == 'siap disajikan') {
+      return 'batalkan status';
     }
     // Add more conditions for other status texts if needed
     return 'Ubah Status';
