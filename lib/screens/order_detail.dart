@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TransactionDetailPage extends StatefulWidget {
   final Map<String, dynamic> transaction;
@@ -79,15 +80,20 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
   }
 
   // Function to update the status
-  void _updateStatus() {
-    setState(() {
-      if (status == 'baru') {
-        status = 'diproses';
-      } else if (status == 'diproses') {
-        status = 'siap disajikan';
-      }
-      // You can add more conditions for other status transitions if needed
-    });
+  void _updateStatus() async {
+    String newStatus = '';
+    if (status == 'baru') {
+      newStatus = 'diproses';
+    } else if (status == 'diproses') {
+      newStatus = 'siap disajikan';
+    }
+    // Lakukan pembaruan status di database menggunakan Supabase
+    final supabase = Supabase.instance.client;
+    await supabase
+        .from('transaksi')
+        .update({'status': newStatus})
+        .eq('idtransaksi', widget.transaction['idtransaksi'])
+        .select();
   }
 
   // Function to get the button text based on the current status

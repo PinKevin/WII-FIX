@@ -13,7 +13,7 @@ class OrdersPage extends StatefulWidget {
 class _OrdersPageState extends State<OrdersPage> {
   Future<List<Map<String, dynamic>>> _getTransactions() async {
     final response = await supabase.from('transaksi').select(
-        'shift, status, kodemeja, namapelanggan, total, metodepembayaran');
+        'idtransaksi, shift, status, kodemeja, namapelanggan, total, metodepembayaran');
 
     List<Map<String, dynamic>> transactions = response.map((item) {
       return Map<String, dynamic>.from(item);
