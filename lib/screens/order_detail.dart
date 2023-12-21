@@ -26,7 +26,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detail Transaksi'),
+        title: const Text('Detail Transaksi'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -67,7 +67,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
               color: Colors.black87,
@@ -75,7 +75,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
           ),
           Text(
             value.toString(), // Convert value to string
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               color: Colors.grey,
             ),
