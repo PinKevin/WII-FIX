@@ -4,8 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class TransactionDetailPage extends StatefulWidget {
   final Map<String, dynamic> transaction;
 
-  const TransactionDetailPage({Key? key, required this.transaction})
-      : super(key: key);
+  const TransactionDetailPage({super.key, required this.transaction});
 
   @override
   _TransactionDetailPageState createState() => _TransactionDetailPageState();
@@ -25,7 +24,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detail Transaksi'),
+        title: const Text('Detail Transaksi'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -43,13 +42,15 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
           ],
         ),
       ),
-      floatingActionButton: ElevatedButton(
-        onPressed: () {
-          // Call a function to update the status
-          _updateStatus();
-        },
-        child: Text(_getButtonText()),
-      ),
+      floatingActionButton: status != 'siap disajikan'
+          ? ElevatedButton(
+              onPressed: () {
+                // Call a function to update the status
+                _updateStatus();
+              },
+              child: Text(_getButtonText()),
+            )
+          : null,
     );
   }
 
@@ -61,7 +62,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
               color: Colors.black87,
@@ -69,7 +70,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
           ),
           Text(
             value.toString(), // Convert value to string
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               color: Colors.grey,
             ),

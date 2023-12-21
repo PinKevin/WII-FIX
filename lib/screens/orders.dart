@@ -4,7 +4,7 @@ import 'package:wii/main.dart';
 import 'package:wii/screens/order_detail.dart'; // Import file baru
 
 class OrdersPage extends StatefulWidget {
-  const OrdersPage({Key? key}) : super(key: key);
+  const OrdersPage({super.key});
 
   @override
   State<OrdersPage> createState() => _OrdersPageState();
@@ -32,14 +32,14 @@ class _OrdersPageState extends State<OrdersPage> {
         future: _getTransactions(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
             return Center(
               child: Text(
                 'Error: ${snapshot.error}',
-                style: TextStyle(color: Colors.red),
+                style: const TextStyle(color: Colors.red),
               ),
             );
           } else {
@@ -71,30 +71,30 @@ class _OrdersPageState extends State<OrdersPage> {
                             children: [
                               Text(
                                 'Shift: ${transaction['shift']}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 14,
                                   color: Colors.grey,
                                 ),
                               ),
                               Text(
                                 '${transaction['kodemeja']}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 14,
                                   color: Colors.grey,
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Text(
                             '${transaction['namapelanggan']}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: Colors.black87,
                             ),
                           ),
-                          Divider(
+                          const Divider(
                             color: Colors.grey,
                             thickness: 0.5,
                           ),
@@ -103,7 +103,7 @@ class _OrdersPageState extends State<OrdersPage> {
                             children: [
                               Text(
                                 '${transaction['total']}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
                                   color: Colors.grey,
@@ -114,7 +114,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                 style: TextStyle(
                                   color: transaction['status'] == 'baru' ||
                                           transaction['status'] == 'diproses'
-                                      ? Color.fromARGB(255, 255, 0, 0)
+                                      ? const Color.fromARGB(255, 255, 0, 0)
                                       : Colors.green,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
