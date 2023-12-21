@@ -44,7 +44,8 @@ class _OrdersPageState extends State<OrdersPage> {
             );
           } else {
             var transactions = snapshot.data;
-
+            transactions
+                ?.sort((a, b) => a['idtransaksi'].compareTo(b['idtransaksi']));
             return ListView.builder(
               itemCount: transactions?.length,
               itemBuilder: (context, index) {

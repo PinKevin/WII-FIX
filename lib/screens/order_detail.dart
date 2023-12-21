@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:wii/screens/orders.dart';
 
 class TransactionDetailPage extends StatefulWidget {
   final Map<String, dynamic> transaction;
@@ -47,6 +48,11 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
         onPressed: () {
           // Call a function to update the status
           _updateStatus();
+          // Navigate to order.dart
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => OrdersPage()),
+          );
         },
         child: Text(_getButtonText()),
       ),
@@ -80,7 +86,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
   }
 
   // Function to update the status
-  void _updateStatus() async {
+  Future<void> _updateStatus() async {
     String newStatus = '';
     if (status == 'baru') {
       newStatus = 'diproses';
