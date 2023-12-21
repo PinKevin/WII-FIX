@@ -1,4 +1,7 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wii/components/snackbar.dart';
 import 'package:wii/main.dart';
 
@@ -13,7 +16,22 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  Future<void> authenticateUser() async {
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus();
+  }
+
+  Future<void> _checkLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
+    if (isLoggedIn) {
+      Navigator.pushReplacementNamed(context, '/dashboard');
+    }
+  }
+
+  Future<void> _authenticateUser() async {
     final username = _usernameController.text.trim();
     final password = _passwordController.text.trim();
 
@@ -21,18 +39,28 @@ class _LoginPageState extends State<LoginPage> {
         .from('pengguna')
         .select('username, password')
         .eq('username', username)
-        .single();
+        .eq('password', password)
+        .limit(1);
 
-    final user = response;
-    final storedPassword = user['password'].toString();
-
-    if (storedPassword == password) {
-      // ignore: use_build_context_synchronously
-      Navigator.pushNamed(context, '/dashboard');
-    } else {
-      // ignore: use_build_context_synchronously
+    if (response.isEmpty) {
       CustomSnackBar.showSnackBar(context, 'Login gagal');
+    } else {
+      var user = response.first;
+      var username = user['username'];
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      prefs.setBool('isLoggedIn', true);
+      prefs.setString('username', username);
+
+      Navigator.pushReplacementNamed(context, '/dashboard');
     }
+  }
+
+  void logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('isLoggedIn');
+
+    Navigator.popUntil(context, ModalRoute.withName('/'));
   }
 
   @override
@@ -63,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  authenticateUser();
+                  _authenticateUser();
                 },
                 child: const Text('Login'),
               ),

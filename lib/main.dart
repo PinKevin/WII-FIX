@@ -27,8 +27,9 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(useMaterial3: true),
       debugShowCheckedModeBanner: false,
       title: 'WII',
-      home: const LoginPage(),
+      initialRoute: '/',
       routes: {
+        '/': (context) => const LoginPage(),
         '/dashboard': (context) => const DashboardPage(),
         '/orders': (context) => const OrdersPage(),
         '/profile': (context) => const ProfilePage()
