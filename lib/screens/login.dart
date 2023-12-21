@@ -45,8 +45,12 @@ class _LoginPageState extends State<LoginPage> {
     if (response.isEmpty) {
       CustomSnackBar.showSnackBar(context, 'Login gagal');
     } else {
+      var user = response.first;
+      var username = user['username'];
       SharedPreferences prefs = await SharedPreferences.getInstance();
+
       prefs.setBool('isLoggedIn', true);
+      prefs.setString('username', username);
 
       Navigator.pushReplacementNamed(context, '/dashboard');
     }

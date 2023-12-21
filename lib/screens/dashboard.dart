@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wii/components/bottom_app_bar.dart';
+import 'package:wii/main.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -12,11 +14,36 @@ class _DashboardPageState extends State<DashboardPage> {
   bool shift1Selected = false;
   bool shift2Selected = false;
 
+  Future<String?> _getUsername() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? username = prefs.getString('username');
+
+    final response = await supabase
+        .from('pengguna')
+        .select('namapengguna')
+        .eq('username', username!)
+        .single();
+
+    return response['namapengguna'];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('WII'),
+          title: FutureBuilder<String?>(
+              future: _getUsername(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else {
+                  if (snapshot.hasError) {
+                    return const Text('Error');
+                  } else {
+                    return Text(snapshot.data ?? 'Tamu');
+                  }
+                }
+              }),
         ),
         body: Center(
             child: Column(
