@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:wii/screens/dashboard.dart';
 import 'package:wii/screens/login.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:wii/screens/main.dart';
+import 'package:wii/screens/onboarding.dart';
 import 'package:wii/screens/orders.dart';
 import 'package:wii/screens/profile.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,15 +26,19 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(useMaterial3: true),
+      theme: ThemeData(
+        useMaterial3: true,
+        textTheme: GoogleFonts.dmSansTextTheme(),
+      ),
       debugShowCheckedModeBanner: false,
       title: 'WII',
       initialRoute: '/',
       routes: {
         '/': (context) => const LoginPage(),
-        '/dashboard': (context) => const DashboardPage(),
+        '/dashboard': (context) => const MainPage(),
         '/orders': (context) => const OrdersPage(),
-        '/profile': (context) => const ProfilePage()
+        '/profile': (context) => const ProfilePage(),
+        '/onboarding': (context) => const OnboardingPage(),
       },
     );
   }

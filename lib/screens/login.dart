@@ -1,9 +1,10 @@
-// ignore_for_file: unnecessary_null_comparison
+// ignore_for_file: unnecessary_null_comparison, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wii/components/snackbar.dart';
 import 'package:wii/main.dart';
+import 'package:wii/screens/onboarding.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -52,7 +53,10 @@ class _LoginPageState extends State<LoginPage> {
       prefs.setBool('isLoggedIn', true);
       prefs.setString('username', username);
 
-      Navigator.pushReplacementNamed(context, '/dashboard');
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const OnboardingPage()),
+      );
     }
   }
 

@@ -5,8 +5,7 @@ import 'package:wii/screens/orders.dart';
 class TransactionDetailPage extends StatefulWidget {
   final Map<String, dynamic> transaction;
 
-  const TransactionDetailPage({Key? key, required this.transaction})
-      : super(key: key);
+  const TransactionDetailPage({super.key, required this.transaction});
 
   @override
   _TransactionDetailPageState createState() => _TransactionDetailPageState();
@@ -51,7 +50,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
           // Navigate to order.dart
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => OrdersPage()),
+            MaterialPageRoute(builder: (context) => const OrdersPage()),
           );
         },
         child: Text(_getButtonText()),
