@@ -144,7 +144,7 @@ class _MainPageState extends State<MainPage> {
 
         const DashboardPage(),
 
-        const OrdersPage(),
+        // const OrdersPage(),
 
         const ProfilePage(),
       ][currentPageIndex],

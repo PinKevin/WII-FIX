@@ -1,24 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:wii/main.dart';
 import 'package:wii/screens/orders.dart';
 
 class TransactionDetailPage extends StatefulWidget {
   final Map<String, dynamic> transaction;
+  final DateTime? selectedDate;
+  final bool shift1Selected;
+  final bool shift2Selected;
 
-  const TransactionDetailPage({super.key, required this.transaction});
+  const TransactionDetailPage({
+    super.key,
+    required this.transaction,
+    required this.selectedDate,
+    required this.shift1Selected,
+    required this.shift2Selected,
+  });
 
   @override
+  // ignore: library_private_types_in_public_api
   _TransactionDetailPageState createState() => _TransactionDetailPageState();
 }
 
 class _TransactionDetailPageState extends State<TransactionDetailPage> {
   late String status;
+  late List<Map<String, dynamic>> detailTransactions;
 
   @override
   void initState() {
     super.initState();
     // Set the initial status from the transaction data
     status = widget.transaction['status'];
+    detailTransactions = [];
+    // Fetch transaction details when the page is initialized
+    _getDetailTransactions(widget.transaction['idtransaksi']);
+  }
+
+  _getDetailTransactions(String idtransaksi) async {
+    final response = await supabase
+        .from('detail_transaksi')
+        .select('namamenu, jumlah')
+        .eq('idtransaksi', idtransaksi)
+        .eq('status', 1);
+
+    setState(() {
+      detailTransactions = response.map((item) {
+        return {
+          'namamenu': item['namamenu'] as String,
+          'jumlah': item['jumlah'].toString()
+        };
+      }).toList();
+    });
   }
 
   @override
@@ -40,6 +72,24 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
             _buildDetailRow(
                 'Metode Pembayaran', widget.transaction['metodepembayaran']),
             _buildDetailRow('Status', status),
+            const SizedBox(height: 16),
+            const Text(
+              'Detail Transaksi',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                color: Colors.black87,
+              ),
+            ),
+            if (detailTransactions.isNotEmpty)
+              Column(
+                children: detailTransactions
+                    .map((detail) => ListTile(
+                          title: Text(detail['namamenu']),
+                          subtitle: Text(detail['jumlah']),
+                        ))
+                    .toList(),
+              )
           ],
         ),
       ),
@@ -48,9 +98,14 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
           // Call a function to update the status
           _updateStatus();
           // Navigate to order.dart
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const OrdersPage()),
+            MaterialPageRoute(
+                builder: (context) => OrdersPage(
+                      selectedDate: widget.selectedDate,
+                      shift1Selected: widget.shift1Selected,
+                      shift2Selected: widget.shift2Selected,
+                    )),
           );
         },
         child: Text(_getButtonText()),
@@ -109,7 +164,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
     } else if (status == 'diproses') {
       return 'Pesanan Siap';
     } else if (status == 'siap disajikan') {
-      return 'batalkan status';
+      return 'Batalkan Status';
     }
     // Add more conditions for other status texts if needed
     return 'Ubah Status';
