@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:wii/main.dart';
 import 'package:wii/screens/orders.dart';
 
 class TransactionDetailPage extends StatefulWidget {
@@ -9,26 +10,47 @@ class TransactionDetailPage extends StatefulWidget {
   final bool shift2Selected;
 
   const TransactionDetailPage({
-    Key? key,
+    super.key,
     required this.transaction,
     required this.selectedDate,
     required this.shift1Selected,
     required this.shift2Selected,
-  }) : super(key: key);
+  });
 
   @override
+  // ignore: library_private_types_in_public_api
   _TransactionDetailPageState createState() => _TransactionDetailPageState();
 }
 
 class _TransactionDetailPageState extends State<TransactionDetailPage> {
   late String status;
+  late List<Map<String, dynamic>> detailTransactions;
 
   @override
   void initState() {
     super.initState();
     // Set the initial status from the transaction data
     status = widget.transaction['status'];
+    detailTransactions = [];
     // Fetch transaction details when the page is initialized
+    _getDetailTransactions(widget.transaction['idtransaksi']);
+  }
+
+  _getDetailTransactions(String idtransaksi) async {
+    final response = await supabase
+        .from('detail_transaksi')
+        .select('namamenu, jumlah')
+        .eq('idtransaksi', idtransaksi)
+        .eq('status', 1);
+
+    setState(() {
+      detailTransactions = response.map((item) {
+        return {
+          'namamenu': item['namamenu'] as String,
+          'jumlah': item['jumlah'].toString()
+        };
+      }).toList();
+    });
   }
 
   @override
@@ -50,6 +72,24 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
             _buildDetailRow(
                 'Metode Pembayaran', widget.transaction['metodepembayaran']),
             _buildDetailRow('Status', status),
+            const SizedBox(height: 16),
+            const Text(
+              'Detail Transaksi',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                color: Colors.black87,
+              ),
+            ),
+            if (detailTransactions.isNotEmpty)
+              Column(
+                children: detailTransactions
+                    .map((detail) => ListTile(
+                          title: Text(detail['namamenu']),
+                          subtitle: Text(detail['jumlah']),
+                        ))
+                    .toList(),
+              )
           ],
         ),
       ),

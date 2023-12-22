@@ -35,20 +35,6 @@ class _OrdersPageState extends State<OrdersPage> {
     return transactions;
   }
 
-  Future<List<Map<String, dynamic>>> _getDetailTransactions(
-      String idtransaksi) async {
-    final response = await supabase
-        .from('detail_transaksi')
-        .select('*')
-        .eq('idtransaksi', idtransaksi);
-
-    List<Map<String, dynamic>> detailtransactions = response.map((item) {
-      return Map<String, dynamic>.from(item);
-    }).toList();
-
-    return detailtransactions;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,12 +63,10 @@ class _OrdersPageState extends State<OrdersPage> {
               itemCount: transactions?.length,
               itemBuilder: (context, index) {
                 var transaction = transactions![index];
-                var detailtransactions = _getDetailTransactions(
-                    transaction['idtransaksi'].toString());
 
                 return GestureDetector(
                   onTap: () {
-                    _showTransactionDetail(transaction, detailtransactions);
+                    _showTransactionDetail(transaction);
                   },
                   child: Card(
                     elevation: 3,
@@ -166,8 +150,7 @@ class _OrdersPageState extends State<OrdersPage> {
     );
   }
 
-  void _showTransactionDetail(
-      Map<String, dynamic> transaction, detailtransactions) {
+  void _showTransactionDetail(Map<String, dynamic> transaction) {
     Navigator.push(
       context,
       MaterialPageRoute(
