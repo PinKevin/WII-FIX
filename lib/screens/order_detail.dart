@@ -9,12 +9,12 @@ class TransactionDetailPage extends StatefulWidget {
   final bool shift2Selected;
 
   const TransactionDetailPage({
-    super.key,
+    Key? key,
     required this.transaction,
     required this.selectedDate,
     required this.shift1Selected,
     required this.shift2Selected,
-  });
+  }) : super(key: key);
 
   @override
   _TransactionDetailPageState createState() => _TransactionDetailPageState();
@@ -28,6 +28,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
     super.initState();
     // Set the initial status from the transaction data
     status = widget.transaction['status'];
+    // Fetch transaction details when the page is initialized
   }
 
   @override
