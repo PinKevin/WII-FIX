@@ -9,18 +9,13 @@ class BottomBar {
           children: [
             IconButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/dashboard');
+                  Navigator.pushReplacementNamed(context, '/dashboard');
                 },
                 icon: const Icon(Icons.home)),
             // ignore: avoid_print
             IconButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/orders');
-                },
-                icon: const Icon(Icons.list)),
-            IconButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/profile');
+                  Navigator.pushReplacementNamed(context, '/profile');
                 },
                 icon: const Icon(Icons.person))
           ],
