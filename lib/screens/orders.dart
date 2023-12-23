@@ -1,10 +1,8 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wii/main.dart';
 import 'package:wii/screens/order_detail.dart';
-import 'package:wii/utils/currencyFormatter.dart'; // Import file baru
+import 'package:wii/utils/currency_formatter.dart'; // Import file baru
 
 class OrdersPage extends StatefulWidget {
   const OrdersPage({super.key});
@@ -19,8 +17,6 @@ class _OrdersPageState extends State<OrdersPage> {
 
   loadData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getInt('shift'));
-    print(prefs.getString('date'));
     setState(() {
       selectedShift = prefs.getInt('shift')!;
       selectedDate = DateTime.parse(prefs.getString('date')!);
@@ -46,7 +42,6 @@ class _OrdersPageState extends State<OrdersPage> {
         return Map<String, dynamic>.from(item);
       }).toList();
 
-      print(response);
       return transactions;
     } else {
       return [];
@@ -120,8 +115,6 @@ class _OrdersPageState extends State<OrdersPage> {
               itemCount: transactions?.length,
               itemBuilder: (context, index) {
                 var transaction = transactions![index];
-
-                print(transaction);
 
                 return GestureDetector(
                   onTap: () {

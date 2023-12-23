@@ -15,7 +15,6 @@ class _DashboardPageState extends State<DashboardPage> {
 
   loadData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getInt('shift'));
     setState(() {
       selectedShift = prefs.getInt('shift')!;
       selectedDate = DateTime.parse(prefs.getString('date')!);

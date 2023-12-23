@@ -81,7 +81,7 @@ class _MainPageState extends State<MainPage> {
 
                   return Badge(
                     label: Text(count.toString()),
-                    child: Icon(Icons.shopping_cart_outlined),
+                    child: const Icon(Icons.shopping_cart_outlined),
                   );
                 }
               },
@@ -109,7 +109,7 @@ class _MainPageState extends State<MainPage> {
 
                   return Badge(
                     label: Text(count.toString()),
-                    child: Icon(Icons.shopping_cart_outlined),
+                    child: const Icon(Icons.shopping_cart_outlined),
                   );
                 }
               },
