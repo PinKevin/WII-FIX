@@ -86,27 +86,92 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
           ),
           Container(
-            transform: Matrix4.translationValues(0.0, -70.0, 0.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Colors.purple.shade50),
-              borderRadius: const BorderRadius.all(Radius.circular(16)),
-            ),
-            margin: const EdgeInsets.all(16),
-            padding: const EdgeInsets.all(16),
-            width: double.infinity,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(height: 50),
-                Text(selectedDate != null
-                    ? 'Tanggal: ${selectedDate?.day}-${selectedDate?.month}-${selectedDate?.year}'
-                    : 'Pilih tanggal'),
-                Text('Tanggal: ${selectedShift}'),
-                const SizedBox(height: 20),
-              ],
-            ),
-          ),
+              transform: Matrix4.translationValues(0.0, -70.0, 0.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.purple.shade50),
+                borderRadius: const BorderRadius.all(Radius.circular(16)),
+              ),
+              margin: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
+              width: double.infinity,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(selectedDate != null
+                          ? '${selectedDate?.day}-${selectedDate?.month}-${selectedDate?.year}'
+                          : 'Pilih tanggal'),
+                      Text('Shift $selectedShift'),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      const SizedBox(height: 20),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Card(
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                side: BorderSide(
+                                    color: Colors.purple.shade100, width: 0.5),
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.all(20),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'Pesanan baru',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    Text('1'),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Card(
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                side: BorderSide(
+                                    color: Colors.purple.shade100, width: 0.5),
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.all(20),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'Pesanan baru',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    Text('1'),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              )),
         ],
       ),
     );
