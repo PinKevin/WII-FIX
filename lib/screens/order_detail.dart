@@ -94,7 +94,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
           // Navigate to order.dart
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => OrdersPage()),
+            MaterialPageRoute(builder: (context) => const OrdersPage()),
           );
         },
         child: Text(_getButtonText()),

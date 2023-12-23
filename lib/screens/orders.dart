@@ -20,6 +20,7 @@ class _OrdersPageState extends State<OrdersPage> {
   loadData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     print(prefs.getInt('shift'));
+    print(prefs.getString('date'));
     setState(() {
       selectedShift = prefs.getInt('shift')!;
       selectedDate = DateTime.parse(prefs.getString('date')!);
@@ -37,14 +38,15 @@ class _OrdersPageState extends State<OrdersPage> {
       final response = await supabase
           .from('transaksi')
           .select(
-              'idtransaksi, shift, status, kodemeja, namapelanggan, total, metodepembayaran')
-          .eq('tanggal', selectedDate.toString())
-          .eq('shift', selectedShift.toString());
+              'idtransaksi, shift, status, kodemeja, namapelanggan, total, metodepembayaran, tanggal, waktu')
+          .eq('tanggal', selectedDate as Object)
+          .eq('shift', selectedShift as Object);
 
       List<Map<String, dynamic>> transactions = response.map((item) {
         return Map<String, dynamic>.from(item);
       }).toList();
 
+      print(response);
       return transactions;
     } else {
       return [];
@@ -110,9 +112,6 @@ class _OrdersPageState extends State<OrdersPage> {
             );
           } else {
             var transactions = snapshot.data;
-
-            transactions?.sort((a, b) => a['tanggal'].compareTo(b['tanggal']));
-            transactions?.sort((a, b) => a['waktu'].compareTo(b['waktu']));
 
             return ListView.builder(
               physics: const BouncingScrollPhysics(),

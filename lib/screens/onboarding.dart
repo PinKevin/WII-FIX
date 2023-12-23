@@ -22,6 +22,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   // }
 
   void _onIntroEnd(context) async {
+    await _selectDate(context);
     Navigator.pushReplacementNamed(context, '/dashboard');
   }
 
