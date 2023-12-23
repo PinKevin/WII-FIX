@@ -12,8 +12,8 @@ class OnboardingPage extends StatefulWidget {
 
 class _OnboardingPageState extends State<OnboardingPage> {
   final introKey = GlobalKey<IntroductionScreenState>();
-  bool shift1Selected = false;
-  bool shift2Selected = false;
+
+  DateTime? selectedDate;
 
   // @override
   // void initState() {
@@ -21,7 +21,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   //   super.initState();
   // }
 
-  void _onIntroEnd(context) {
+  void _onIntroEnd(context) async {
     Navigator.pushReplacementNamed(context, '/dashboard');
   }
 
@@ -30,7 +30,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     const String shoppingSvg = 'assets/shopping.svg';
     const String cookingSvg = 'assets/cooking.svg';
     var list = <String>['Shift 1', 'Shift 2'].toList();
-    String dropdownValue = list.first;
+    String dropdownValue = '';
 
     return IntroductionScreen(
       bodyPadding: const EdgeInsets.all(0),
@@ -78,8 +78,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Text(
-                  "Pilih shift terlebih dahulu",
-                  style: TextStyle(fontSize: 18, color: Colors.black38),
+                  "Pilih tanggal dan shift anda terlebih dahulu",
+                  style: TextStyle(fontSize: 16, color: Colors.black38),
                   textAlign: TextAlign.center,
                 ),
                 Column(
@@ -88,40 +88,79 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    DropdownMenu<String>(
-                      initialSelection: list.first,
-                      width: 200,
-                      onSelected: (String? value) {
-                        // This is called when the user selects an item.
-                        setState(() {
-                          dropdownValue = value!;
-                        });
-                      },
-                      textStyle: const TextStyle(fontSize: 14),
-                      menuStyle: const MenuStyle(
-                        backgroundColor: MaterialStatePropertyAll(Colors.white),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.purple.shade50),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(16)),
                       ),
-                      dropdownMenuEntries:
-                          list.map<DropdownMenuEntry<String>>((String value) {
-                        return DropdownMenuEntry<String>(
-                            value: value, label: value);
-                      }).toList(),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    FilledButton(
-                      onPressed: dropdownValue != ''
-                          ? () async {
+                      margin: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
+                      width: double.infinity,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              side: BorderSide(
+                                  color: Colors.purple.shade100, width: 1),
+                            ),
+                            onPressed: () => _selectDate(context),
+                            child: Text(selectedDate != null
+                                ? 'Tanggal: ${selectedDate!.day}-${selectedDate!.month}-${selectedDate!.year}'
+                                : 'Pilih tanggal'),
+                          ),
+                          const SizedBox(height: 20),
+                          DropdownMenu<String>(
+                            inputDecorationTheme: InputDecorationTheme(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(
+                                    color: Colors.purple, width: 1),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(
+                                    color: Colors.purple, width: 1),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 6),
+                            ),
+                            initialSelection: list.first,
+                            width: 200,
+                            onSelected: (String? value) async {
+                              setState(() {
+                                dropdownValue = value!;
+                              });
                               SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
-                              prefs.setString('shift', dropdownValue);
-
-                              _onIntroEnd(context);
-                            }
-                          : null,
+                              prefs.setInt(
+                                'shift',
+                                value.toString() == 'Shift 1' ? 1 : 2,
+                              );
+                            },
+                            textStyle: const TextStyle(fontSize: 14),
+                            menuStyle: const MenuStyle(
+                              backgroundColor:
+                                  MaterialStatePropertyAll(Colors.white),
+                            ),
+                            dropdownMenuEntries: list
+                                .map<DropdownMenuEntry<String>>((String value) {
+                              return DropdownMenuEntry<String>(
+                                  value: value, label: value);
+                            }).toList(),
+                          ),
+                        ],
+                      ),
+                    ),
+                    FilledButton(
+                      onPressed: () {
+                        _onIntroEnd(context);
+                      },
                       child: const Text('Pilih Shift'),
-                    )
+                    ),
                   ],
                 ),
               ]),
@@ -181,5 +220,21 @@ class _OnboardingPageState extends State<OnboardingPage> {
         activeSize: Size.square(14),
       ),
     );
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: selectedDate ?? DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2100));
+
+    if (pickedDate != null && pickedDate != selectedDate) {
+      setState(() {
+        selectedDate = pickedDate;
+      });
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('date', pickedDate.toString());
+    }
   }
 }

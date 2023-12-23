@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wii/main.dart';
-import 'package:wii/screens/orders.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -11,10 +10,23 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  bool shift1Selected = false;
-  bool shift2Selected = false;
+  int selectedShift = 1;
+  DateTime selectedDate = DateTime.parse('2023-12-22T08:16:26Z');
 
-  DateTime? selectedDate;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _asyncMethod();
+    });
+  }
+
+  _asyncMethod() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(prefs.getInt('shift'));
+    selectedShift = prefs.getInt('shift')!;
+    selectedDate = DateTime.parse(prefs.getString('date')!);
+  }
 
   Future<String?> _getNamapengguna() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -87,42 +99,11 @@ class _DashboardPageState extends State<DashboardPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const SizedBox(height: 50),
-                ElevatedButton(
-                    onPressed: () => _selectDate(context),
-                    child: Text(selectedDate != null
-                        ? 'Tanggal: ${selectedDate!.day}-${selectedDate!.month}-${selectedDate!.year}'
-                        : 'Pilih tanggal')),
+                Text(
+                    'Tanggal: ${selectedDate.day}-${selectedDate.month}-${selectedDate.year}' ??
+                        'Pilih tanggal'),
+                Text('Tanggal: ${selectedShift}'),
                 const SizedBox(height: 20),
-                ToggleButtons(
-                    isSelected: [shift1Selected, shift2Selected],
-                    onPressed: (index) {
-                      setState(() {
-                        if (index == 0) {
-                          shift1Selected = true;
-                          shift2Selected = false;
-                        } else {
-                          shift1Selected = false;
-                          shift2Selected = true;
-                        }
-                      });
-                    },
-                    children: const [Text('Shift 1'), Text('Shift 2')]),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: (shift1Selected || shift2Selected)
-                      ? () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => OrdersPage(
-                                        selectedDate: selectedDate,
-                                        shift1Selected: shift1Selected,
-                                        shift2Selected: shift2Selected,
-                                      )));
-                        }
-                      : null,
-                  child: const Text('Pilih Shift'),
-                )
               ],
             ),
           ),

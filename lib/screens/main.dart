@@ -104,9 +104,7 @@ class _MainPageState extends State<MainPage> {
                   var transactions = snapshot.data;
 
                   var count = transactions!
-                      .where((transaction) =>
-                          transaction['status'] == 'baru' ||
-                          transaction['status'] == 'diproses')
+                      .where((transaction) => transaction['status'] == 'baru')
                       .length;
 
                   return Badge(
@@ -144,7 +142,7 @@ class _MainPageState extends State<MainPage> {
 
         const DashboardPage(),
 
-        // const OrdersPage(),
+        const OrdersPage(),
 
         const ProfilePage(),
       ][currentPageIndex],

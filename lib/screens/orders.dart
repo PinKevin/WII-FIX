@@ -1,32 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wii/main.dart';
 import 'package:wii/screens/order_detail.dart';
 import 'package:wii/utils/currencyFormatter.dart'; // Import file baru
 
 class OrdersPage extends StatefulWidget {
-  final DateTime? selectedDate;
-  final bool shift1Selected;
-  final bool shift2Selected;
-
-  const OrdersPage({
-    super.key,
-    required this.selectedDate,
-    required this.shift1Selected,
-    required this.shift2Selected,
-  });
+  const OrdersPage({super.key});
 
   @override
   State<OrdersPage> createState() => _OrdersPageState();
 }
 
 class _OrdersPageState extends State<OrdersPage> {
+  String selectedShift = '1';
+  DateTime selectedDate = DateTime.parse('2023-12-22T08:16:26Z');
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _asyncMethod();
+    });
+  }
+
+  _asyncMethod() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    selectedShift = prefs.getString('shift') ?? '';
+    selectedDate =
+        DateTime.parse(prefs.getString('date') ?? '2023-12-22T08:16:26Z');
+  }
+
+  // @override
+  // void initState() async {
+  //   super.initState();
+  //
+  // }
+
   Future<List<Map<String, dynamic>>> _getTransactions() async {
     final response = await supabase
         .from('transaksi')
         .select(
             'idtransaksi, shift, status, kodemeja, namapelanggan, total, metodepembayaran')
-        .eq('tanggal', widget.selectedDate as Object)
-        .eq('shift', widget.shift1Selected ? 1 : 2);
+        .eq('tanggal', selectedDate.toString())
+        .eq('shift', selectedShift);
 
     List<Map<String, dynamic>> transactions = response.map((item) {
       return Map<String, dynamic>.from(item);
@@ -227,9 +243,6 @@ class _OrdersPageState extends State<OrdersPage> {
       MaterialPageRoute(
         builder: (context) => TransactionDetailPage(
           transaction: transaction,
-          selectedDate: widget.selectedDate,
-          shift1Selected: widget.shift1Selected,
-          shift2Selected: widget.shift2Selected,
         ),
       ),
     );

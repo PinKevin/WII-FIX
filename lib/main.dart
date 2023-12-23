@@ -3,7 +3,7 @@ import 'package:wii/screens/login.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wii/screens/main.dart';
 import 'package:wii/screens/onboarding.dart';
-// import 'package:wii/screens/orders.dart';
+import 'package:wii/screens/orders.dart';
 import 'package:wii/screens/profile.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -36,7 +36,7 @@ class MainApp extends StatelessWidget {
       routes: {
         '/': (context) => const LoginPage(),
         '/dashboard': (context) => const MainPage(),
-        // '/orders': (context) => const OrdersPage(),
+        '/orders': (context) => const OrdersPage(),
         '/profile': (context) => const ProfilePage(),
         '/onboarding': (context) => const OnboardingPage(),
       },
