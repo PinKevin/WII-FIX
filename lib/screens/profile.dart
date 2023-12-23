@@ -35,6 +35,15 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profil'),
+        leading: const SizedBox(),
+        elevation: 1,
+        backgroundColor: Colors.purple.shade50,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(32),
+            bottomRight: Radius.circular(32),
+          ),
+        ),
       ),
       body: Container(
         padding: const EdgeInsets.all(16),

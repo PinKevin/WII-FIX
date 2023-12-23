@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wii/main.dart';
@@ -12,43 +14,41 @@ class OrdersPage extends StatefulWidget {
 }
 
 class _OrdersPageState extends State<OrdersPage> {
-  String selectedShift = '1';
-  DateTime selectedDate = DateTime.parse('2023-12-22T08:16:26Z');
+  int? selectedShift;
+  DateTime? selectedDate;
+
+  loadData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(prefs.getInt('shift'));
+    setState(() {
+      selectedShift = prefs.getInt('shift')!;
+      selectedDate = DateTime.parse(prefs.getString('date')!);
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _asyncMethod();
-    });
+    loadData();
   }
-
-  _asyncMethod() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    selectedShift = prefs.getString('shift') ?? '';
-    selectedDate =
-        DateTime.parse(prefs.getString('date') ?? '2023-12-22T08:16:26Z');
-  }
-
-  // @override
-  // void initState() async {
-  //   super.initState();
-  //
-  // }
 
   Future<List<Map<String, dynamic>>> _getTransactions() async {
-    final response = await supabase
-        .from('transaksi')
-        .select(
-            'idtransaksi, shift, status, kodemeja, namapelanggan, total, metodepembayaran')
-        .eq('tanggal', selectedDate.toString())
-        .eq('shift', selectedShift);
+    if (selectedDate != null && selectedShift != null) {
+      final response = await supabase
+          .from('transaksi')
+          .select(
+              'idtransaksi, shift, status, kodemeja, namapelanggan, total, metodepembayaran')
+          .eq('tanggal', selectedDate.toString())
+          .eq('shift', selectedShift.toString());
 
-    List<Map<String, dynamic>> transactions = response.map((item) {
-      return Map<String, dynamic>.from(item);
-    }).toList();
+      List<Map<String, dynamic>> transactions = response.map((item) {
+        return Map<String, dynamic>.from(item);
+      }).toList();
 
-    return transactions;
+      return transactions;
+    } else {
+      return [];
+    }
   }
 
   renderStatus(String status) {
@@ -84,6 +84,7 @@ class _OrdersPageState extends State<OrdersPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Daftar Transaksi'),
+        leading: const SizedBox(),
         elevation: 1,
         backgroundColor: Colors.purple.shade50,
         shape: const RoundedRectangleBorder(

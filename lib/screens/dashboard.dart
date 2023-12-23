@@ -10,22 +10,22 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  int selectedShift = 1;
-  DateTime selectedDate = DateTime.parse('2023-12-22T08:16:26Z');
+  int? selectedShift;
+  DateTime? selectedDate;
+
+  loadData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(prefs.getInt('shift'));
+    setState(() {
+      selectedShift = prefs.getInt('shift')!;
+      selectedDate = DateTime.parse(prefs.getString('date')!);
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _asyncMethod();
-    });
-  }
-
-  _asyncMethod() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getInt('shift'));
-    selectedShift = prefs.getInt('shift')!;
-    selectedDate = DateTime.parse(prefs.getString('date')!);
+    loadData();
   }
 
   Future<String?> _getNamapengguna() async {
@@ -99,9 +99,9 @@ class _DashboardPageState extends State<DashboardPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const SizedBox(height: 50),
-                Text(
-                    'Tanggal: ${selectedDate.day}-${selectedDate.month}-${selectedDate.year}' ??
-                        'Pilih tanggal'),
+                Text(selectedDate != null
+                    ? 'Tanggal: ${selectedDate?.day}-${selectedDate?.month}-${selectedDate?.year}'
+                    : 'Pilih tanggal'),
                 Text('Tanggal: ${selectedShift}'),
                 const SizedBox(height: 20),
               ],
